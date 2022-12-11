@@ -13,6 +13,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final VoidCallback? voidCallback;
   final String? hintText;
+  final bool? autofocus;
 
   const CustomTextFormField({
     Key? key,
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.voidCallback,
     this.hintText,
+    this.autofocus = false,
 
 
 

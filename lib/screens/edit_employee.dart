@@ -26,11 +26,20 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
   final TextEditingController employeeEmailController = TextEditingController();
   final TextEditingController employeeTpController = TextEditingController();
   DateTime? dateOfBirth;
+  late FocusNode dob ;
 
   @override
   void initState() {
     super.initState();
     getEmployee();
+    dob = FocusNode();
+  }
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    dob.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -61,6 +70,8 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
                       controller: employeeLastNameController,
                     ),
                     CustomTextFormField(
+                      autofocus: true,
+                      focusNode: dob,
                       label: 'Date of Birth',
                       controller: employeeDobController,
                       voidCallback: () {
@@ -76,7 +87,6 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
                       controller: employeeTpController,
                       inputType: TextInputType.number,
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -84,14 +94,14 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
                           onPressed: () {
                             editEmployee();
                           },
-                          child: const  Text('Edit'),
+                          child: const Text('Edit'),
                         ),
                         const Spacer(),
                         ElevatedButton(
                           onPressed: () {
                             editEmployee();
                           },
-                          child: const  Text('Delete'),
+                          child: const Text('Delete'),
                         ),
                       ],
                     )
@@ -135,21 +145,7 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
         phone: drift.Value(employeeTpController.text),
       );
       Provider.of<AppDb>(context, listen: false).insertEmployee(entity).then(
-            (value) => ScaffoldMessenger.of(context)
-                .
-                // SnackBar(
-                //   content: Text('Employee Updated Successfully: $value',
-                //       style: TextStyle(
-                //           fontSize: 15,
-                //           color: Colors.white,
-                //           fontWeight: FontWeight.bold)),
-                //   backgroundColor: Colors.teal,
-                //   action: SnackBarAction(label: 'Close', onPressed: (){
-                //
-                //   }),
-                // ),
-
-                showMaterialBanner(
+            (value) => ScaffoldMessenger.of(context).showMaterialBanner(
               MaterialBanner(
                 content: Text('New Employee Inserted: $value'),
                 contentTextStyle: const TextStyle(
@@ -169,6 +165,7 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
               ),
             ),
           );
+      dob.requestFocus();
       employeeNameController.clear();
       employeeLastNameController.clear();
       employeeEmailController.clear();

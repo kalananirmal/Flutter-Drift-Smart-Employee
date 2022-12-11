@@ -32,6 +32,17 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   }
 
   @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    firstname.dispose();
+
+    super.dispose();
+  }
+
+
+
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -47,19 +58,23 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
             padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
               child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 key: _formKey,
                 child: Column(
                   children: [
                     CustomTextFormField(
+                      autofocus: true,
                       focusNode: firstname,
                       label: 'First Name',
                       controller: employeeNameController,
                       maxLength: 50,
+                      minLength: 3,
                     ),
                     CustomTextFormField(
                       label: 'Last Name',
                       controller: employeeLastNameController,
                       maxLength: 50,
+                      minLength: 3,
                     ),
                     CustomTextFormField(
                       label: 'Date of Birth',
@@ -67,16 +82,21 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                       voidCallback: () {
                         pickDateOfBirth(context);
                       },
+                      minLength: 3,
+                      maxLength: 50,
                     ),
                     CustomTextFormField(
                       label: 'Email',
                       controller: employeeEmailController,
+                      minLength: 3,
+                      maxLength: 50,
                     ),
                     CustomTextFormField(
                       label: 'Phone',
                       controller: employeeTpController,
                       inputType: TextInputType.number,
                       maxLength: 10,
+                      minLength: 3,
                     ),
                     SizedBox(
                       width: 400,
@@ -147,7 +167,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               ),
             ),
           );
-      FocusScope.of(context).requestFocus(firstname);
+     firstname.requestFocus();
       employeeNameController.clear();
       employeeLastNameController.clear();
       employeeEmailController.clear();
